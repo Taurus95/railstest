@@ -1,4 +1,26 @@
+<% require 'data_analytics.rb' %>
+
 <h1>InstaShot</h1>
+
 <p>The Next Instagram</p>
 
+<p>Graph</p>
+
+<%
+    gr = Graph.new
+    gr.add_edge("a", "c", 7)
+    gr.add_edge("a", "e", 14)
+    gr.add_edge("a", "f", 9)
+    gr.add_edge("c", "d", 15)
+    gr.add_edge("c", "f", 10)
+    gr.add_edge("d", "f", 11)
+    gr.add_edge("d", "b", 6)
+    gr.add_edge("f", "e", 2)
+    gr.add_edge("e", "b", 9)
+    gr.shortest_paths("a")
+%>
+
+<%= gr.permanent_point %>
+<br/><br/>
+<img src="/djikstraJPG.JPG" width="50%" alt="..." />
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_31_200411) do
+ActiveRecord::Schema.define(version: 2019_07_29_210825) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 2019_07_31_200411) do
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.string "photo"
+    t.string "color"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

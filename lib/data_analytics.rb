@@ -25,6 +25,43 @@ class Graph
 
 
   def dijkstra(source)
+    @distance={}
+    @previous={}
+    nodes.each do |nodo|
+      @distance[nodo] = INFINITY
+      @previous[nodo] = -1
+    end
+
+    @distance[source] = 0 #Distance from point to point
+
+    missing_node = nodes.compact #nil elements removed.
+
+    while (missing_node.size > 0)
+      elementNull = nil;
+
+      missing_node.each do |min|
+        if (not elementNull) or (@distance[min] and @distance[min] < @distance[elementNull])
+          elementNull = min
+        end
+      end
+
+      if (@distance[elementNull] == INFINITY)
+        break
+      end
+
+      missing_node = missing_node - [elementNull]
+
+      graph[elementNull].keys.each do |vertex|
+        alt = @distance[elementNull] + graph[elementNull][vertex]
+
+        if (alt < @distance[vertex])
+          @distance[vertex] = alt
+          @previous[vertex] = elementNull
+        end
+
+      end
+
+    end
 
   end
 
@@ -36,23 +73,27 @@ class Graph
   end
 
   def shortest_paths(source)
+    @graph_paths=[]
+    @source = source
+    dijkstra source
+    nodes.each do |dest|
+      @path=[]
+
+      find_path dest
+
+      now=if @distance[dest] != INFINITY
+                        @distance[dest]
+                      else
+                        "no path"
+                      end
+      @graph_paths<< "permanent point(#{dest})  #{@path.join("-->")} : #{now}"
+    end
+    @graph_paths
   end
 
-end
-
-if __FILE__ == $0
-  gr = Graph.new
-  gr.add_edge("a", "c", 7)
-  gr.add_edge("a", "e", 14)
-  gr.add_edge("a", "f", 9)
-  gr.add_edge("c", "d", 15)
-  gr.add_edge("c", "f", 10)
-  gr.add_edge("d", "f", 11)
-  gr.add_edge("d", "b", 6)
-  gr.add_edge("f", "e", 2)
-  gr.add_edge("e", "b", 9)
-  gr.shortest_paths("a")
-  gr.print_result 
+  def permanent_point
+    return @graph_paths
+  end
 
 end
 

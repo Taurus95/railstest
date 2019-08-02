@@ -11,7 +11,7 @@
     </div>
   <% end %>
   <div class="color">
-    <%= form.label :color %><br>
+    <%= form.label :colors %><br>
     <%= form.collection_select :color, Color.all, :code, :name %>
   </div>
   <div class="field">
@@ -27,4 +27,5 @@
   <div class="actions">
     <%= form.submit %>
   </div>
+
 <% end %>
