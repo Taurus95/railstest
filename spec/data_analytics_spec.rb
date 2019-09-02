@@ -39,6 +39,7 @@ describe Graph do
       graph.add_edge("a", "b", 5)
       graph.add_edge("b", "c", 3)
       graph.add_edge("c", "d", 1)
+      #puts graph.adyacente("a")
       graph.dijkstra("a")
       expect(graph.distance).to eq({"a"=>0, "b"=>5, "c"=>8, "d"=>9})
     end

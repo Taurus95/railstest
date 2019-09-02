@@ -1,5 +1,5 @@
 class Graph
-  attr_reader :graph, :nodes, :previous, :distance 
+  attr_reader :graph, :nodes, :previous, :distance
   INFINITY = 1 << 64
 
   def initialize
@@ -26,6 +26,33 @@ class Graph
 
   def dijkstra(source)
 
+    distances = {}
+    definitivo = ""
+    actual = source
+    recorridos = {}
+
+    nodes.each do |n|
+        recorridos[n] = false
+    end
+
+    #encuentro la distancia a cada nodo desde el source
+    nodes.each do |n|
+        distances[n] = distances self.shortest_paths()
+    end
+
+    return distances
+
+  end
+
+  #
+  #Return nodos adyacentes
+  #
+  def adyacente(nodo)
+    adyacentes = Array.new
+    @graph[nodo].each do |n|
+        adyacentes << n[0]
+    end
+    return adyacentes
   end
 
   def find_path(dest)
@@ -36,6 +63,7 @@ class Graph
   end
 
   def shortest_paths(source)
+      return nil
   end
 
 end
@@ -52,8 +80,6 @@ if __FILE__ == $0
   gr.add_edge("f", "e", 2)
   gr.add_edge("e", "b", 9)
   gr.shortest_paths("a")
-  gr.print_result 
+  gr.print_result
 
 end
-
-
