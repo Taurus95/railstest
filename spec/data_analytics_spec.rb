@@ -66,7 +66,7 @@ describe Graph do
       graph.add_edge("b", "t", 1)
       graph.add_edge("t", "d", 1)
       graph.dijkstra("a")
-      expect(graph.shortest_paths("d")).to eq(["t","b","r"])
+      expect(graph.shortest_paths("d")).to eq(["d","t","b","r","a"])
     end
 
 

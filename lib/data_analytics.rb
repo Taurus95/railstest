@@ -8,6 +8,7 @@ class Graph
         @graph = {}
         @nodes = []
         @distance = {}
+        @previous = {}
     end
 
     def connect_graph(source, target, weight)
@@ -56,6 +57,7 @@ class Graph
 
         end
         @distance = final
+        self.shortest_paths("d")
     end
 
     #
@@ -68,7 +70,6 @@ class Graph
         end
         adyacentes
     end
-
 
     #
     # Return boolean if there is a no analisado
@@ -136,6 +137,8 @@ class Graph
         final = {}
         analisados = {}
         route = []
+        route << dest
+        @previous["a"] = -1
 
         @nodes.each do |n|
             analisados[n] = false
@@ -145,6 +148,7 @@ class Graph
         while analisados(analisados)
             adyacentes(position, analisados).each do |n|
                 if @distance[n] == (@distance[position] - graph[n][position])
+                    @previous[position] = n
                     position = n
                     route << n
                 end
@@ -152,7 +156,13 @@ class Graph
             end
 
         end
+
+        route << "a"
+
+        puts @previous
+
         route
+
     end
 end
 
