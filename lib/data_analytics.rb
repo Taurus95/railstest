@@ -26,13 +26,17 @@ class Graph
 
   def dijkstra(source)
 
-    distances = {}
+    eval = {}
     definitivo = ""
     actual = source
-    recorridos = {}
+    recorridos = Array.new
 
     nodes.each do |n|
         recorridos[n] = false
+    end
+
+    while @nodes.length == recorridos.length do
+        code
     end
 
     #encuentro la distancia a cada nodo desde el source
