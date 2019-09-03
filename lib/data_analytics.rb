@@ -1,89 +1,173 @@
+# frozen_string_literal: true
+
 class Graph
-  attr_reader :graph, :nodes, :previous, :distance
-  INFINITY = 1 << 64
+    attr_reader :graph, :nodes, :previous, :distance
+    INFINITY = 1 << 64
 
-  def initialize
-    @graph = {}
-    @nodes = Array.new
-  end
-
-  def connect_graph(source, target, weight)
-    if (!graph.has_key?(source))
-      graph[source] = {target => weight}
-    else
-      graph[source][target] = weight
-    end
-    if (!nodes.include?(source))
-      nodes << source
-    end
-  end
-
-  def add_edge(source, target, weight)
-    connect_graph(source, target, weight)
-    connect_graph(target, source, weight)
-  end
-
-
-  def dijkstra(source)
-
-    eval = {}
-    definitivo = ""
-    actual = source
-    recorridos = Array.new
-
-    nodes.each do |n|
-        recorridos[n] = false
+    def initialize
+        @graph = {}
+        @nodes = []
+        @distance = {}
     end
 
-    while @nodes.length == recorridos.length do
-        code
+    def connect_graph(source, target, weight)
+        if !graph.key?(source)
+            graph[source] = { target => weight }
+        else
+            graph[source][target] = weight
+        end
+        nodes << source unless nodes.include?(source)
     end
 
-    #encuentro la distancia a cada nodo desde el source
-    nodes.each do |n|
-        distances[n] = distances self.shortest_paths()
+    def add_edge(source, target, weight)
+        connect_graph(source, target, weight)
+        connect_graph(target, source, weight)
     end
 
-    return distances
+    def dijkstra(source)
+        position = source
+        acumulada = 0
+        final = {}
+        temporal = {}
+        analisados = {}
 
-  end
+        nodes.each do |n|
+            final[n] = nil
+            temporal[n] = 1_000_000
+            analisados[n] = false
+        end
 
-  #
-  #Return nodos adyacentes
-  #
-  def adyacente(nodo)
-    adyacentes = Array.new
-    @graph[nodo].each do |n|
-        adyacentes << n[0]
+        if position == source
+            final[position] = 0
+            temporal[position] = 0
+            acumulada = 0
+        end
+
+        while analisados(analisados)
+            adyacentes(position, analisados).each do |n|
+                if temporal[n] > graph[position][n] + acumulada
+                    temporal[n] = graph[position][n] + acumulada
+                end
+            end
+            analisados[position] = true
+            position = menorTemporal(temporal, analisados)
+            acumulada = temporal[position]
+            final[position] = temporal[position] unless temporal[position].nil?
+
+        end
+        @distance = final
     end
-    return adyacentes
-  end
 
-  def find_path(dest)
-    if @previous[dest] != -1
-      find_path @previous[dest]
+    #
+    # Return nodos adyacentes disponibles
+    #
+    def adyacentes(nodo, analisados)
+        adyacentes = []
+        @graph[nodo].each do |n|
+            adyacentes << n[0] if analisados[n[0]] == false
+        end
+        adyacentes
     end
-    @path << dest
-  end
 
-  def shortest_paths(source)
-      return nil
-  end
 
+    #
+    # Return boolean if there is a no analisado
+    #
+    def analisados(analisados)
+        analisados.each do |_n, value|
+            return true if value == false
+        end
+        false
+    end
+
+    #
+    # Return boolean
+    #
+    def analisado(nodo, analisados)
+        analisados.each do |n, value|
+            return true if nodo == n && value == true
+        end
+        false
+    end
+
+    #
+    # Return boolean if there is a no analisado
+    #
+    def menorTemporal(temporal, analisados)
+        menor = 1_000_000
+        letra = ''
+        temporal.each do |n, value|
+            if value < menor && !value.nil? && !analisado(n, analisados)
+                letra = n
+            end
+        end
+        letra
+    end
+
+    def find_path(dest)
+
+        position = dest
+        final = {}
+        analisados = {}
+        route = []
+
+        @nodes.each do |n|
+            analisados[n] = false
+        end
+        analisados[position] = true
+
+        while analisados(analisados)
+            adyacentes(position, analisados).each do |n|
+                puts @distance[n]
+                if @distance[n] == (@distance[position] - graph[n][position])
+                    position = n
+                    route << n
+                end
+
+                analisados[n] = true
+            end
+
+        end
+        route
+    end
+
+    def shortest_paths(dest)
+        position = dest
+        final = {}
+        analisados = {}
+        route = []
+
+        @nodes.each do |n|
+            analisados[n] = false
+        end
+        analisados[position] = true
+
+        while analisados(analisados)
+            adyacentes(position, analisados).each do |n|
+                if @distance[n] == (@distance[position] - graph[n][position])
+                    position = n
+                    route << n
+                end
+                analisados[n] = true
+            end
+
+        end
+        route
+    end
 end
 
-if __FILE__ == $0
-  gr = Graph.new
-  gr.add_edge("a", "c", 7)
-  gr.add_edge("a", "e", 14)
-  gr.add_edge("a", "f", 9)
-  gr.add_edge("c", "d", 15)
-  gr.add_edge("c", "f", 10)
-  gr.add_edge("d", "f", 11)
-  gr.add_edge("d", "b", 6)
-  gr.add_edge("f", "e", 2)
-  gr.add_edge("e", "b", 9)
-  gr.shortest_paths("a")
-  gr.print_result
+if $PROGRAM_NAME == __FILE__
+    gr = Graph.new
+    gr.add_edge('a', 'c', 7)
+    gr.add_edge('a', 'e', 14)
+    gr.add_edge('a', 'f', 9)
+    gr.add_edge('c', 'd', 15)
+    gr.add_edge('c', 'f', 10)
+    gr.add_edge('d', 'f', 11)
+    gr.add_edge('d', 'b', 6)
+    gr.add_edge('f', 'e', 2)
+    gr.add_edge('e', 'b', 9)
+    gr.shortest_paths('a')
+    gr.print_result
 
 end

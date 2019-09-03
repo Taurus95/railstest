@@ -37,9 +37,12 @@ describe Graph do
     it 'is dijkstras algorithm works to track distance #dijkstra' do
       graph=new_graph
       graph.add_edge("a", "b", 5)
+      # graph.add_edge("a", "r", 2)
+      # graph.add_edge("r", "b", 1)
+      # graph.add_edge("b", "t", 1)
+      # graph.add_edge("t", "d", 1)
       graph.add_edge("b", "c", 3)
       graph.add_edge("c", "d", 1)
-      #puts graph.adyacente("a")
       graph.dijkstra("a")
       expect(graph.distance).to eq({"a"=>0, "b"=>5, "c"=>8, "d"=>9})
     end
@@ -52,13 +55,18 @@ describe Graph do
       graph.dijkstra("a")
       expect(graph.previous).to eq({"a"=>-1, "b"=>"a", "c"=>"b", "d"=>"c"})
     end
-
+    #lo modifique un poco para que responda a la ruta mas corta siempre desde a hasta un punto x dentro del grafo
     it 'is dijkstra algorithm find shortest path #shortest_paths' do
       graph=new_graph
       graph.add_edge("a", "b", 5)
       graph.add_edge("b", "c", 3)
       graph.add_edge("c", "d", 1)
-      expect(graph.shortest_paths("a")).to include ("Target(c)  a-->b-->c : 8")
+      graph.add_edge("a", "r", 2)
+      graph.add_edge("r", "b", 1)
+      graph.add_edge("b", "t", 1)
+      graph.add_edge("t", "d", 1)
+      graph.dijkstra("a")
+      expect(graph.shortest_paths("d")).to eq(["t","b","r"])
     end
 
 
