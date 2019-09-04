@@ -34,7 +34,7 @@ class Graph
 
         nodes.each do |n|
             final[n] = nil
-            temporal[n] = 1_000_000
+            temporal[n] = INFINITY
             analisados[n] = false
         end
 
@@ -57,7 +57,7 @@ class Graph
 
         end
         @distance = final
-        self.shortest_paths("d")
+        shortest_paths('d')
     end
 
     #
@@ -95,7 +95,7 @@ class Graph
     # Return boolean if there is a no analisado
     #
     def menorTemporal(temporal, analisados)
-        menor = 1_000_000
+        menor = INFINITY
         letra = ''
         temporal.each do |n, value|
             if value < menor && !value.nil? && !analisado(n, analisados)
@@ -105,40 +105,16 @@ class Graph
         letra
     end
 
-    def find_path(dest)
-
-        position = dest
-        final = {}
-        analisados = {}
-        route = []
-
-        @nodes.each do |n|
-            analisados[n] = false
-        end
-        analisados[position] = true
-
-        while analisados(analisados)
-            adyacentes(position, analisados).each do |n|
-                puts @distance[n]
-                if @distance[n] == (@distance[position] - graph[n][position])
-                    position = n
-                    route << n
-                end
-
-                analisados[n] = true
-            end
-
-        end
-        route
-    end
-
+    #
+    # Set the previous variable and return the shortest path from "a" to dest
+    #
     def shortest_paths(dest)
         position = dest
         final = {}
         analisados = {}
         route = []
         route << dest
-        @previous["a"] = -1
+        @previous['a'] = -1
 
         @nodes.each do |n|
             analisados[n] = false
@@ -156,13 +132,8 @@ class Graph
             end
 
         end
-
-        route << "a"
-
-        puts @previous
-
+        route << 'a'
         route
-
     end
 end
 

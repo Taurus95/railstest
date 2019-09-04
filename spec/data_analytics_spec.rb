@@ -1,4 +1,5 @@
 require 'data_analytics'
+
 describe Graph do
   let(:new_graph) {
     Graph.new
